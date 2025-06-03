@@ -3,14 +3,19 @@ from flask_cors import CORS
 import requests
 
 app = Flask(__name__)
-CORS(app)
+
+CORS(app, resources={r"/api/*": {"origins": "http://127.0.0.1:5500"}}, supports_credentials=True)
 
 OLLAMA_URL = "http://localhost:11434/api/generate"
-OLLAMA_MODEL = "mistral"  
+OLLAMA_MODEL = "mistral"
 
-@app.route('/api/perguntar', methods=['POST'])
+@app.route('/api/perguntar', methods=['POST', 'OPTIONS'])
 def perguntar():
-    dados = request.json
+    if request.method == 'OPTIONS':
+        # Responde à requisição preflight do navegador
+        return jsonify({'status': 'ok'}), 200
+
+    dados = request.get_json()
     pergunta = dados.get('pergunta')
 
     if not pergunta:
