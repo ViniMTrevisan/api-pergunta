@@ -12,7 +12,6 @@ OLLAMA_MODEL = "mistral"
 @app.route('/api/perguntar', methods=['POST', 'OPTIONS'])
 def perguntar():
     if request.method == 'OPTIONS':
-        # Responde à requisição preflight do navegador
         return jsonify({'status': 'ok'}), 200
 
     dados = request.get_json()
